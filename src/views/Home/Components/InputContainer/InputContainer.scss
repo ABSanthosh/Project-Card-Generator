@@ -1,0 +1,11 @@
+@import "../../../../styles/mixins";
+
+.InputContainer {
+  width: 100%;
+  height: auto;
+  @include make-flex($dir: row, $just: space-between);
+
+  &--req {
+    color: red;
+  }
+}
