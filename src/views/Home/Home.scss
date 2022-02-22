@@ -14,18 +14,30 @@
     border: 1px solid #e3e3e9;
     border-radius: 5px;
     background-color: white;
+    overflow-y: auto;
   }
 
   &__preview {
     padding: 20px;
-    @include make-flex();
-    gap: 10px;
-    overflow-y: auto;
+    @include make-flex($just: flex-start);
+
+    gap: 15px;
+
+    &--top {
+      @include make-flex($just: flex-start, $align: flex-start);
+      width: 100%;
+      gap: 15px;
+
+      hr {
+        width: 100%;
+      }
+    }
   }
 
   &__properties {
     @include make-flex($just: space-between);
-    &--top {
+    &--top,
+    &--bottom {
       padding: 20px;
       width: 100%;
       @include make-flex($just: flex-start, $align: flex-start);

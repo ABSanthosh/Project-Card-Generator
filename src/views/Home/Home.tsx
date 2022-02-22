@@ -1,6 +1,8 @@
+import "./Home.scss";
 import { useStoreRehydrated } from "easy-peasy";
 import { useEffect, useState } from "react";
 import { CardWithImage } from "../../Components/CardWithImage/CardWithImage";
+import { FancyButton } from "../../Components/FancyButton/FancyButton";
 import { FancyCheckbox } from "../../Components/FancyCheckbox/FancyCheckbox";
 import { FancyDropdown } from "../../Components/FancyDropdown/FancyDropdown";
 import { FancyInput } from "../../Components/FancyInput/FancyInput";
@@ -8,7 +10,8 @@ import { FancyTextarea } from "../../Components/FancyTextarea/FancyTextarea";
 import { useStoreActions, useStoreState } from "../../hooks/typedStore";
 import { getRepo, isGitHubRepo } from "../../operations/githubApi";
 import { InputContainer } from "./Components/InputContainer/InputContainer";
-import "./Home.scss";
+const download = require("downloadjs");
+
 interface IHomeProps {}
 
 export default function Home(props: IHomeProps) {
@@ -249,33 +252,45 @@ export default function Home(props: IHomeProps) {
           </div>
         </div>
         <div className="HomeWrapper__properties--bottom">
-
-          
+          <h2>Downloads</h2>
+          <hr />
+          <FancyButton
+            value="SVG"
+            onClick={() => {
+              download(cardSrc, `${repo}.svg`);
+            }}
+          />
         </div>
       </div>
       <div className="HomeWrapper__preview">
-        {isRehydrated && repoData && (
-          <>
-            <CardWithImage
-              title={repo}
-              description={description}
-              showFork={showFork}
-              showStars={showStars}
-              showIssues={showIssues}
-              showLicense={showLicense}
-              forks={fork}
-              stars={stars}
-              issues={issues}
-              language={language}
-              license={license}
-              showDescription={showDescription}
-              showImage={withImage === "With Image"}
-              setCardSrc={(src) => setCardSrc(src)}
-              cardSrc={cardSrc}
-            />
-            <img src={cardSrc} alt="Card" />
-          </>
-        )}
+        <div className="HomeWrapper__preview--top">
+          <h2>Preview</h2>
+          <hr />
+        </div>
+        <div className="HomeWrapper__preview--bottom">
+          {isRehydrated && repoData && (
+            <>
+              <CardWithImage
+                title={repo}
+                description={description}
+                showFork={showFork}
+                showStars={showStars}
+                showIssues={showIssues}
+                showLicense={showLicense}
+                forks={fork}
+                stars={stars}
+                issues={issues}
+                language={language}
+                license={license}
+                showDescription={showDescription}
+                showImage={withImage === "With Image"}
+                setCardSrc={(src) => setCardSrc(src)}
+                cardSrc={cardSrc}
+              />
+              {/* <img src={cardSrc} alt="Card" /> */}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
