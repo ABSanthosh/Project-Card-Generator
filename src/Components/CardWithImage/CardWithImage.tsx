@@ -8,9 +8,11 @@ export interface ICardWithImageProps {
   image?: string;
   imageAlt?: string;
   showFork: boolean;
+  showImage: boolean;
   showStars: boolean;
   showIssues: boolean;
   showLicense: boolean;
+  showDescription: boolean;
   stars: number;
   forks: number;
   issues: number;
@@ -52,8 +54,14 @@ export function CardWithImage(props: ICardWithImageProps) {
   }, [props.title]);
 
   return (
-    <div className="CardWithImage">
-      <div className="CardWithImage__image"></div>
+    <div
+      className="CardWithImage"
+      style={{
+        height: props.showImage ? undefined : "auto",
+        width: props.showImage ? undefined : "285px",
+      }}
+    >
+      {props.showImage && <div className="CardWithImage__image"></div>}
       <div className="CardWithImage__content">
         <div className="CardWithImage__content--top">
           <div className="CardWithImage__content--title">
@@ -61,9 +69,11 @@ export function CardWithImage(props: ICardWithImageProps) {
               {props.title.split("/")[1]}
             </p>
           </div>
-          <div className="CardWithImage__content--description">
-            {props.description}
-          </div>
+          {props.showDescription && (
+            <div className="CardWithImage__content--description">
+              {props.description}
+            </div>
+          )}
         </div>
         <div className="CardWithImage__content--footer">
           <div className="CardWithImage__content--footer--left">
