@@ -19,6 +19,8 @@
   &__preview {
     padding: 20px;
     @include make-flex();
+    gap: 10px;
+    overflow-y: auto;
   }
 
   &__properties {

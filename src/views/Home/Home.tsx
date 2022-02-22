@@ -1,7 +1,6 @@
 import { useStoreRehydrated } from "easy-peasy";
 import { useEffect, useState } from "react";
 import { CardWithImage } from "../../Components/CardWithImage/CardWithImage";
-import { CardWithoutImage } from "../../Components/CardWithoutImage/CardWithoutImage";
 import { FancyCheckbox } from "../../Components/FancyCheckbox/FancyCheckbox";
 import { FancyDropdown } from "../../Components/FancyDropdown/FancyDropdown";
 import { FancyInput } from "../../Components/FancyInput/FancyInput";
@@ -19,6 +18,7 @@ export default function Home(props: IHomeProps) {
   const setStoreDescription = useStoreActions(
     (actions) => actions.setDescription
   );
+  const [cardSrc, setCardSrc] = useState("");
 
   const isRehydrated = useStoreRehydrated();
 
@@ -37,8 +37,9 @@ export default function Home(props: IHomeProps) {
   const [showStars, setShowStars] = useState(true);
   const [showIssues, setShowIssues] = useState(true);
   const [showLicense, setShowLicense] = useState(true);
+  const [showDescription, setShowDescription] = useState(true);
   const [defaultDescription, setDefaultDescription] = useState(true);
-  const [withImage, setWithImage] = useState("With Image");
+  const [withImage, setWithImage] = useState("Without Image");
 
   useEffect(() => {
     const owner = repo?.split("/")[0];
@@ -55,6 +56,7 @@ export default function Home(props: IHomeProps) {
             const res = await getRepo(owner, repoName);
             console.log(res);
             setRepoDetails(res.data);
+            setDescription(res.data.description);
             setStoreDescription(res.data.description);
           } catch (err) {
             console.log(err);
@@ -72,7 +74,7 @@ export default function Home(props: IHomeProps) {
         if (prev === "" && storeDescription !== prev && defaultDescription) {
           return storeDescription;
         }
-        if (prev && storeDescription !== "") {
+        if (prev && storeDescription !== "" && prev !== repoData.description) {
           setStoreDescription(prev);
           return prev;
         }
@@ -145,10 +147,23 @@ export default function Home(props: IHomeProps) {
             isColumn
             gap="10px"
             alignItems="flex-start"
+            labelChild={
+              <FancyCheckbox
+                name="showDescription"
+                id="showDescription"
+                value={showDescription}
+                style={{ width: "unset" }}
+                setValue={(val) => {
+                  console.log(val);
+                  setShowDescription(val);
+                }}
+              />
+            }
           >
             <FancyTextarea
               name="description"
               id="description"
+              disabled={!showDescription}
               value={description || ""}
               style={{ width: "100%", minWidth: "100%" }}
               setValue={(val) => setDescription(val)}
@@ -238,23 +253,24 @@ export default function Home(props: IHomeProps) {
       <div className="HomeWrapper__preview">
         {isRehydrated && repoData && (
           <>
-            {withImage === "With Image" ? (
-              <CardWithImage
-                title={repo}
-                description={description}
-                showFork={showFork}
-                showStars={showStars}
-                showIssues={showIssues}
-                showLicense={showLicense}
-                forks={fork}
-                stars={stars}
-                issues={issues}
-                language={language}
-                license={license}
-              />
-            ) : (
-              <CardWithoutImage />
-            )}
+            <CardWithImage
+              title={repo}
+              description={description}
+              showFork={showFork}
+              showStars={showStars}
+              showIssues={showIssues}
+              showLicense={showLicense}
+              forks={fork}
+              stars={stars}
+              issues={issues}
+              language={language}
+              license={license}
+              showDescription={showDescription}
+              showImage={withImage === "With Image"}
+              setCardSrc={(src) => setCardSrc(src)}
+              cardSrc={cardSrc}
+            />
+            <img src={cardSrc} alt="Card" />
           </>
         )}
       </div>
