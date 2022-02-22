@@ -15,13 +15,17 @@ interface IHomeProps {}
 export default function Home(props: IHomeProps) {
   const setRepoDetails = useStoreActions((actions) => actions.setRepoDetails);
   const repoData = useStoreState((state) => state.repoData);
+  const storeDescription = useStoreState((state) => state.description);
+  const setStoreDescription = useStoreActions(
+    (actions) => actions.setDescription
+  );
 
   const isRehydrated = useStoreRehydrated();
 
-  const [repo, setRepo] = useState(repoData?.full_name || "");
+  const [repo, setRepo] = useState("");
   const [theme, setTheme] = useState("Light");
   const [borders, setBorders] = useState("Show");
-  const [description, setDescription] = useState(repoData?.description || "");
+  const [description, setDescription] = useState(storeDescription);
 
   const [fork, setFork] = useState(repoData?.forks_count);
   const [stars, setStars] = useState(repoData?.stargazers_count);
@@ -33,6 +37,9 @@ export default function Home(props: IHomeProps) {
   const [showStars, setShowStars] = useState(true);
   const [showIssues, setShowIssues] = useState(true);
   const [showLicense, setShowLicense] = useState(true);
+  const [defaultDescription, setDefaultDescription] = useState(
+    description === repoData.description
+  );
   const [withImage, setWithImage] = useState("With Image");
 
   useEffect(() => {
@@ -61,27 +68,33 @@ export default function Home(props: IHomeProps) {
 
   useEffect(() => {
     if (isRehydrated && repoData) {
-      setRepo(repoData.full_name);
-      setDescription(repoData.description);
+      setDescription((prev: string) => {
+        // console.log(storeDescription, prev);
+        if (prev === "" && storeDescription !== prev && defaultDescription) {
+          return storeDescription;
+        }
+        if (prev && storeDescription !== "") {
+          setStoreDescription(prev);
+          return prev;
+        }
+        return prev;
+      });
       setFork(repoData.forks_count);
       setStars(repoData.stargazers_count);
       setIssues(repoData.open_issues_count);
       setLanguage(repoData.language);
       setLicense(repoData.license);
+      setDefaultDescription(description === repoData.description);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isRehydrated, repoData]);
-
-  // useEffect(() => {
-  //   const newRepoData = {
-  //     ...repoData,
-  //     description,
-  //   };
-
-  //   setRepoDetails(newRepoData);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [description]);
-
+  }, [
+    defaultDescription,
+    description,
+    isRehydrated,
+    repoData,
+    setStoreDescription,
+    storeDescription,
+  ]);
+  
   return (
     <div className="HomeWrapper">
       <div className="HomeWrapper__properties">
@@ -92,9 +105,7 @@ export default function Home(props: IHomeProps) {
             <FancyInput
               name="repo"
               id="repo"
-              setValue={(val) => {
-                setRepo(val);
-              }}
+              setValue={(val) => setRepo(val)}
               value={repo}
               placeholder="ABSanthosh/Gastly"
             />
@@ -148,6 +159,25 @@ export default function Home(props: IHomeProps) {
           </InputContainer>
 
           <div className="HomeWrapper__properties--checkboxContainer">
+            <InputContainer
+              label="Default Description"
+              htmlFor="defaultDescription"
+              style={{ width: "fit-content", gap: "10px" }}
+            >
+              <FancyCheckbox
+                name="defaultDescription"
+                id="defaultDescription"
+                value={defaultDescription}
+                style={{ width: "unset" }}
+                setValue={(val) => {
+                  setDefaultDescription(val);
+                  if (val) {
+                    setDescription(repoData?.description);
+                  }
+                }}
+              />
+            </InputContainer>
+
             <InputContainer
               label="Stars"
               htmlFor="Star"

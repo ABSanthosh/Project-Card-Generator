@@ -36,9 +36,13 @@
     &--checkboxContainer {
       width: 100%;
       height: auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-      grid-template-rows: auto;
+      @include make-flex($just: flex-start, $dir: row);
+      flex-wrap: wrap;
+      gap: 10px;
+
+      & > .InputContainer {
+        margin-right: 18px;
+      }
     }
   }
 }
