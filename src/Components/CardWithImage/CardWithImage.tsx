@@ -1,8 +1,7 @@
 import { useEffect } from "react";
 import "./CardWithImage.scss";
 import * as htmlToImage from "html-to-image";
-const download = require("downloadjs");
-const cs2 = require("canvas2svg");
+
 export interface ICardWithImageProps {
   title: string;
   description: string;
@@ -62,13 +61,11 @@ export function CardWithImage(props: ICardWithImageProps) {
       htmlToImage.toSvg(node).then((svg) => {
         if (props.cardSrc !== svg) {
           props.setCardSrc(svg);
-          // download(svg, "card.svg");
         }
       });
       // htmlToImage.toPng(node).then((dataUrl) => {
       //   if (props.cardSrc !== dataUrl) {
       //     props.setCardSrc(dataUrl);
-      //     // download(svg, "card.svg");
       //   }
       // });
     }

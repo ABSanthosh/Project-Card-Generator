@@ -248,7 +248,10 @@ export default function Home(props: IHomeProps) {
             </InputContainer>
           </div>
         </div>
-        <div className="HomeWrapper__properties--bottom"></div>
+        <div className="HomeWrapper__properties--bottom">
+
+          
+        </div>
       </div>
       <div className="HomeWrapper__preview">
         {isRehydrated && repoData && (
