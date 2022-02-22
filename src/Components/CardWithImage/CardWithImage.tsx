@@ -155,10 +155,12 @@ export function CardWithImage(props: ICardWithImageProps) {
             )}
           </div>
           <div className="CardWithImage__content--footer--right">
-            <img
-              src={`https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${props.language?.toLocaleLowerCase()}/${props.language?.toLocaleLowerCase()}-original.svg`}
-              alt={props.language}
-            />
+            {props.language && (
+              <img
+                src={`https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${props.language?.toLocaleLowerCase()}/${props.language?.toLocaleLowerCase()}-original.svg`}
+                alt={props.language}
+              />
+            )}
           </div>
         </div>
       </div>
