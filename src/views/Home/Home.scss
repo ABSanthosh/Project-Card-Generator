@@ -17,18 +17,28 @@
   }
 
   &__preview {
+    padding: 20px;
+    @include make-flex();
   }
 
   &__properties {
     @include make-flex($just: space-between);
     &--top {
       padding: 20px;
-      width: 100%; 
+      width: 100%;
       @include make-flex($just: flex-start, $align: flex-start);
       gap: 15px;
       hr {
         width: 100%;
       }
+    }
+
+    &--checkboxContainer {
+      width: 100%;
+      height: auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      grid-template-rows: auto;
     }
   }
 }

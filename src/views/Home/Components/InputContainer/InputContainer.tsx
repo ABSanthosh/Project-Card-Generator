@@ -20,6 +20,7 @@ export interface IInputContainerProps {
     | "space-between"
     | "space-around";
   gap?: string;
+  style?: React.CSSProperties;
 }
 
 export function InputContainer(props: IInputContainerProps) {
@@ -31,6 +32,7 @@ export function InputContainer(props: IInputContainerProps) {
         justifyContent: props.justifyContent,
         alignItems: props.alignItems,
         gap: props.gap,
+        ...props.style,
       }}
     >
       <label htmlFor={props.htmlFor}>
