@@ -37,9 +37,7 @@ export default function Home(props: IHomeProps) {
   const [showStars, setShowStars] = useState(true);
   const [showIssues, setShowIssues] = useState(true);
   const [showLicense, setShowLicense] = useState(true);
-  const [defaultDescription, setDefaultDescription] = useState(
-    description === repoData.description
-  );
+  const [defaultDescription, setDefaultDescription] = useState(true);
   const [withImage, setWithImage] = useState("With Image");
 
   useEffect(() => {
@@ -57,6 +55,7 @@ export default function Home(props: IHomeProps) {
             const res = await getRepo(owner, repoName);
             console.log(res);
             setRepoDetails(res.data);
+            setStoreDescription(res.data.description);
           } catch (err) {
             console.log(err);
           }
@@ -69,7 +68,7 @@ export default function Home(props: IHomeProps) {
   useEffect(() => {
     if (isRehydrated && repoData) {
       setDescription((prev: string) => {
-        // console.log(storeDescription, prev);
+        setDefaultDescription(description === repoData.description);
         if (prev === "" && storeDescription !== prev && defaultDescription) {
           return storeDescription;
         }
@@ -84,7 +83,6 @@ export default function Home(props: IHomeProps) {
       setIssues(repoData.open_issues_count);
       setLanguage(repoData.language);
       setLicense(repoData.license);
-      setDefaultDescription(description === repoData.description);
     }
   }, [
     defaultDescription,
@@ -94,7 +92,7 @@ export default function Home(props: IHomeProps) {
     setStoreDescription,
     storeDescription,
   ]);
-  
+
   return (
     <div className="HomeWrapper">
       <div className="HomeWrapper__properties">

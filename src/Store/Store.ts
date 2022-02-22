@@ -18,6 +18,6 @@ const storeModel: StoreModel = {
   }),
 };
 
-const store = createStore(persist(storeModel, { storage: localStorage }));
+const store = createStore(persist(storeModel));
 
 export default store;
