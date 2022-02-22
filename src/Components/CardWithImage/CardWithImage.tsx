@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import "./CardWithImage.scss";
-// const fork = require("../../Assets/Fork.svg");
-
+import * as htmlToImage from "html-to-image";
+const download = require("downloadjs");
+const cs2 = require("canvas2svg");
 export interface ICardWithImageProps {
   title: string;
   description: string;
@@ -13,11 +14,13 @@ export interface ICardWithImageProps {
   showIssues: boolean;
   showLicense: boolean;
   showDescription: boolean;
+  cardSrc: string;
   stars: number;
   forks: number;
   issues: number;
-  license: string;
+  license: string | { name?: string };
   language: string;
+  setCardSrc: (src: string) => void;
 }
 
 const dynamicFontSize = (element: HTMLElement) => {
@@ -53,16 +56,57 @@ export function CardWithImage(props: ICardWithImageProps) {
     }
   }, [props.title]);
 
+  useEffect(() => {
+    if (document.querySelector(".CardWithImage")) {
+      var node: HTMLElement = document.querySelector(".CardWithImage")!;
+      htmlToImage.toSvg(node).then((svg) => {
+        if (props.cardSrc !== svg) {
+          props.setCardSrc(svg);
+          // download(svg, "card.svg");
+        }
+      });
+      // htmlToImage.toPng(node).then((dataUrl) => {
+      //   if (props.cardSrc !== dataUrl) {
+      //     props.setCardSrc(dataUrl);
+      //     // download(svg, "card.svg");
+      //   }
+      // });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    props.title,
+    props.description,
+    props.image,
+    props.imageAlt,
+    props.showFork,
+    props.showImage,
+    props.showStars,
+    props.showIssues,
+    props.showLicense,
+    props.showDescription,
+    props.stars,
+    props.forks,
+    props.issues,
+    props.license,
+    props.language,
+  ]);
+
   return (
     <div
       className="CardWithImage"
       style={{
         height: props.showImage ? undefined : "auto",
-        width: props.showImage ? undefined : "285px",
+        width: props.showImage ? undefined : "350px",
       }}
     >
       {props.showImage && <div className="CardWithImage__image"></div>}
-      <div className="CardWithImage__content">
+      <div
+        className="CardWithImage__content"
+        style={{
+          height: props.showImage ? undefined : "100%",
+          gap: props.showImage ? undefined : "20px",
+        }}
+      >
         <div className="CardWithImage__content--top">
           <div className="CardWithImage__content--title">
             <p className="CardWithImage__content--title--text">
@@ -75,6 +119,7 @@ export function CardWithImage(props: ICardWithImageProps) {
             </div>
           )}
         </div>
+        <hr />
         <div className="CardWithImage__content--footer">
           <div className="CardWithImage__content--footer--left">
             {props.showFork && (
@@ -159,7 +204,11 @@ export function CardWithImage(props: ICardWithImageProps) {
                 </svg>
 
                 <div className="CardWithImage__content--footer--left--item--text">
-                  {props.license === null ? "None" : props.license}
+                  {props.license === null
+                    ? "None"
+                    : typeof props.license === "string"
+                    ? props.license
+                    : props.license?.name || "None"}
                 </div>
               </div>
             )}
