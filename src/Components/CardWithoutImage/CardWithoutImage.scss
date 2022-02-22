@@ -1,0 +1,11 @@
+@import "../../styles/mixins";
+
+.CardWithoutImage {
+  width: 285px;
+  height: 200px;
+
+  background: #fffefc;
+  border: 1px solid #d0d7de;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
