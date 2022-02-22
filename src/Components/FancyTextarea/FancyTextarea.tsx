@@ -7,6 +7,7 @@ export interface IFancyTextareaProps {
   name?: string;
   id?: string;
   style?: React.CSSProperties;
+  disabled?: boolean;
 }
 
 export function FancyTextarea(props: IFancyTextareaProps) {
@@ -14,10 +15,11 @@ export function FancyTextarea(props: IFancyTextareaProps) {
     <textarea
       id={props.id}
       name={props.name}
+      value={props.value}
       style={props.style}
+      disabled={props.disabled}
       className="FancyTextarea"
       placeholder={props.placeholder}
-      value={props.value}
       onChange={(e) => props.setValue(e.target.value)}
     />
   );
