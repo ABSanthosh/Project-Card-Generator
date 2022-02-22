@@ -8,4 +8,8 @@
   &--req {
     color: red;
   }
+  label {
+    @include make-flex($dir: row);
+    gap: 10px;
+  }
 }

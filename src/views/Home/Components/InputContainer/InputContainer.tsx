@@ -3,6 +3,7 @@ import "./InputContainer.scss";
 
 export interface IInputContainerProps {
   children: React.ReactNode;
+  labelChild?: React.ReactNode;
   htmlFor?: string;
   label?: string;
   isRequired?: boolean;
@@ -37,9 +38,8 @@ export function InputContainer(props: IInputContainerProps) {
     >
       <label htmlFor={props.htmlFor}>
         {props.label}
-        {props.isRequired && (
-          <span className="InputContainer--req">&nbsp;*</span>
-        )}
+        {props.isRequired && <span className="InputContainer--req">*</span>}
+        {props.labelChild}
       </label>
       {props.children}
     </div>
